@@ -13,38 +13,87 @@ const timeToString = (time) => {
     return date.toISOString().split('T')[0];
 }
 
+// const Scheduled = () => {
+//     const [items, setItems] = React.useState({});
+
+//     const loadItems = (day) => {
+
+//         setTimeout(() => {
+//             for (let i = -15; i < 85; i++) {
+//                 const time = day.timestamp + i * 24 * 60 * 60 * 1000;
+//                 const strTime = timeToString(time);
+
+//                 if (!items[strTime]) {
+//                     items[strTime] = [];
+
+//                     const numItems = Math.floor(Math.random() * 3 + 1);
+//                     for (let j = 0; j < numItems; j++) {
+//                         items[strTime].push({
+//                             name: 'Item for ' + strTime + ' #' + j,
+//                             height: Math.max(10, Math.floor(Math.random() * 150)),
+//                             day: strTime
+//                         });
+//                     }
+//                 }
+//             }
+//             const newItems = {};
+//             Object.keys(items).forEach(key => {
+//                 newItems[key] = items[key];
+//             });
+//             setItems(newItems);
+//         }, 1000);
+//     }
+
+    
+
+//     return (
+//         <View style={styles.container}>
+//             <Agenda
+//                 items={items}
+//                 loadItemsForMonth={loadItems}
+//                 selected={'2022-12-19'}
+//                 refreshControl={null}
+//                 showClosingKnob={true}
+//                 refreshing={false}
+//             />
+//             <StatusBar />
+//         </View>
+//     )
+// }
+
 const Scheduled = () => {
     const [items, setItems] = React.useState({});
 
     const loadItems = (day) => {
-
         setTimeout(() => {
+            const newItems = Object.assign({}, items);
+
             for (let i = -15; i < 85; i++) {
                 const time = day.timestamp + i * 24 * 60 * 60 * 1000;
                 const strTime = timeToString(time);
 
-                if (!items[strTime]) {
-                    items[strTime] = [];
+                if (!newItems[strTime]) {
+                    newItems[strTime] = [];
 
                     const numItems = Math.floor(Math.random() * 3 + 1);
+                    const newItemArray = [];
+
                     for (let j = 0; j < numItems; j++) {
-                        items[strTime].push({
+                        const newItem = {
                             name: 'Item for ' + strTime + ' #' + j,
                             height: Math.max(10, Math.floor(Math.random() * 150)),
-                            day: strTime
-                        });
+                            day: strTime,
+                        };
+                        newItemArray.push(newItem);
                     }
+
+                    newItems[strTime] = [...newItems[strTime], ...newItemArray];
                 }
             }
-            const newItems = {};
-            Object.keys(items).forEach(key => {
-                newItems[key] = items[key];
-            });
+
             setItems(newItems);
         }, 1000);
-    }
-
-    
+    };
 
     return (
         <View style={styles.container}>
@@ -58,8 +107,8 @@ const Scheduled = () => {
             />
             <StatusBar />
         </View>
-    )
-}
+    );
+};
 
 const styles = StyleSheet.create({
     container: {
